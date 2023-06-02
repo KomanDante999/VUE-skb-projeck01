@@ -13,5 +13,8 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'max-len': ['error', { code: 150 }], // максимальная длинна строки
+    'jsx-a11y/label-has-for': ['error', { required: { some: ['nesting', 'id'], }, },],
+    'jsx-a11y/label-has-associated-control': ['error', { required: { some: ['nesting', 'id'], }, },],
   },
 };

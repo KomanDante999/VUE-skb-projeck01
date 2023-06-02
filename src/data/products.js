@@ -59,4 +59,4 @@ export default [
     prise: '30 690',
     img: 'img/headphones.jpg',
   },
-]
+];
