@@ -1,20 +1,19 @@
 module.exports = {
-  root: true,
   env: {
-    node: true,
+    browser: true,
+    es2021: true,
   },
   extends: [
-    'plugin:vue/essential',
-    '@vue/airbnb',
+    'airbnb-base',
+    'plugin:vue/vue3-essential',
   ],
   parserOptions: {
-    parser: '@babel/eslint-parser',
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
+  plugins: [
+    'vue',
+  ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'max-len': ['error', { code: 150 }], // максимальная длинна строки
-    'jsx-a11y/label-has-for': ['error', { required: { some: ['nesting', 'id'], }, },],
-    'jsx-a11y/label-has-associated-control': ['error', { required: { some: ['nesting', 'id'], }, },],
   },
 };
