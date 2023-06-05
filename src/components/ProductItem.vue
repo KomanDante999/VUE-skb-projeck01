@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <li class="catalog__item">
     <a class="catalog__pic" href="#">
       <img :src="product.img" :alt="product.title">
     </a>
@@ -37,14 +37,14 @@
         </label>
       </li>
     </ul>
-  </div>
+  </li>
 </template>
 
 <script>
 
-  export default {
-    name: 'ProductItem',
-    
-    props: ['product',]
-  }
+export default {
+  name: 'ProductItem',
+
+  props: ['product',]
+}
 </script>
