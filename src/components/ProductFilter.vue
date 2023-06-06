@@ -2,15 +2,15 @@
   <aside class="filter">
     <h2 class="filter__title">Фильтры</h2>
 
-    <form class="filter__form form" action="#" method="get" @submit.prevent="">
+    <form class="filter__form form" action="#" method="get" @submit.prevent="submit">
       <fieldset class="form__block">
         <legend class="form__legend">Цена</legend>
         <label class="form__label form__label--price">
-          <input class="form__input" type="text" name="min-price" v-model="currentPriseFrom" />
+          <input class="form__input" type="text" name="min-price" v-model.number="currentPriseFrom" />
           <span class="form__value">От</span>
         </label>
         <label class="form__label form__label--price">
-          <input class="form__input" type="text" name="max-price" v-model="priseTo" />
+          <input class="form__input" type="text" name="max-price" v-model.number="currentPriseTo" />
           <span class="form__value">До</span>
         </label>
       </fieldset>
@@ -18,7 +18,7 @@
       <fieldset class="form__block">
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
-          <select class="form__select" type="text" name="category" v-model="categoryId">
+          <select class="form__select" type="text" name="category" v-model.number="currentCategoryId">
             <option value="0">Все категории</option>
             <option :value="category.id" v-for="category in catigories" :key="category.id">
               {{ category.title }}
@@ -138,7 +138,7 @@
       <button class="filter__submit button button--primery" type="submit">
         Применить
       </button>
-      <button class="filter__reset button button--second" type="button">
+      <button class="filter__reset button button--second" type="button" @click.prevent="reset">
         Сбросить
       </button>
     </form>
@@ -149,18 +149,40 @@
 import catigories from "@/data/catigories";
 
 export default {
+  data() {
+    return {
+      currentPriseFrom: 0,
+      currentPriseTo: 0,
+      currentCategoryId: 0,
+    }
+  },
   props: ["priseFrom", "priseTo", "categoryId"],
   computed: {
-    currentPriseFrom: {
-      get(){
-        return this.priseFrom
-      },
-      set(value){
-        this.$emit('update:priseFrom', value)
-      }
-    },
     catigories() {
       return catigories;
+    },
+  },
+  watch: {
+    priseFrom(value){
+      this.currentPriseFrom = value
+    },
+    priseTo(value){
+      this.currentPriseTo = value
+    },
+    categoryId(value){
+      this.currentCategoryId = value
+    },
+  },
+  methods: {
+    submit(){
+      this.$emit('update:priseFrom', this.currentPriseFrom)
+      this.$emit('update:priseTo', this.currentPriseTo)
+      this.$emit('update:categoryId', this.currentCategoryId)
+    },
+    reset(){
+      this.$emit('update:priseFrom', 0)
+      this.$emit('update:priseTo', 0)
+      this.$emit('update:categoryId', 0)
     },
   },
 };
