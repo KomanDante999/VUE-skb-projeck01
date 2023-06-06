@@ -10,7 +10,7 @@
     </div>
 
     <div class="content__catalog">
-      <ProductFilter/>
+      <ProductFilter :prise-from.sync="filterPriseFrom" :prise-to.sync="filterPriseTo" :category-id.sync="filterCategoryId"/>
       <section class="catalog">
         <ProductList :products="products"/>
         <BasePagination v-model="page" :count="productsCountTotal" :per-page="productsPerPage"/>
