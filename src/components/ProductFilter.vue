@@ -61,6 +61,7 @@
                 type="radio"
                 name="color"
                 :value="color.id"
+                v-model.number="currentColorId"
               />
               <span class="colors__value" :style="{ backgroundColor: color.value }">
               </span>
@@ -206,17 +207,22 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
+    colorId(value) {
+      this.currentColorId = value;
+    },
   },
   methods: {
     submit() {
       this.$emit("update:priseFrom", this.currentPriseFrom);
       this.$emit("update:priseTo", this.currentPriseTo);
       this.$emit("update:categoryId", this.currentCategoryId);
+      this.$emit("update:colorId", this.currentColorId);
     },
     reset() {
       this.$emit("update:priseFrom", 0);
       this.$emit("update:priseTo", 0);
       this.$emit("update:categoryId", 0);
+      this.$emit("update:colorId", 0);
     },
   },
 };
