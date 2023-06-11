@@ -6,7 +6,7 @@
         :class="{ 'pagination__link--disabled': page === 1 }"
         href="#"
         aria-label="Предыдущая страница"
-        @click.prevent="pagunate(page - 1)"
+        @click.prevent="paginate(page - 1)"
       >
         <svg width="8" height="14" fill="currentColor">
           <use xlink:href="#icon-arrow-left"></use>
@@ -22,7 +22,7 @@
         href="#"
         class="pagination__link"
         :class="{ 'pagination__link--current': pageNumber === page }"
-        @click.prevent="pagunate(pageNumber)"
+        @click.prevent="paginate(pageNumber)"
       >
         {{ pageNumber }}
       </a>
@@ -33,7 +33,7 @@
         :class="{ 'pagination__link--disabled': page === pagesTotalNum }"
         href="#"
         aria-label="Следующая страница"
-        @click.prevent="pagunate(page + 1)"
+        @click.prevent="paginate(page + 1)"
       >
         <svg width="8" height="14" fill="currentColor">
           <use xlink:href="#icon-arrow-right"></use>
@@ -47,7 +47,7 @@
 export default {
   model: {
     prop: "page",
-    event: "pagunate",
+    event: "paginate",
   },
   props: ["page", "count", "perPage"],
   computed: {
@@ -56,16 +56,11 @@ export default {
     },
   },
   methods: {
-    pagunate(page) {
-      if (page < 1) {
-        page = 1;
-        return;
+    paginate(page) {
+      if (page < 1 || page > this.pagesTotalNum) {
+        return
       }
-      if (page > this.pagesTotalNum) {
-        page = this.pagesTotalNum;
-        return;
-      }
-      this.$emit("pagunate", page);
+      this.$emit("paginate", page);
     },
   },
 };
