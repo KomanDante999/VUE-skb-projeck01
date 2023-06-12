@@ -3,10 +3,10 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="#" @click="gotoPage('main')"> Каталог </a>
+          <router-link class="breadcrumbs__link" :to="{name: 'main'}" > Каталог </router-link>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="#" @click="gotoPage('main')"> {{ catigory.title }} </a>
+          <a class="breadcrumbs__link" href="#" @click.prevent="$router.push({name: 'main'})" > {{ catigory.title }} </a>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link"> {{ product.title }} </a>
@@ -262,14 +262,13 @@
 <script>
 import products from "@/data/products";
 import catigories from "@/data/catigories";
-import gotoPage from '@/helpers/gotoPaje';
+// import gotoPage from '@/helpers/gotoPaje';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  props: ['pageParams'],
   computed: {
     product(){
-      return products.find(product => product.id === this.pageParams.id)
+      return products.find(product => product.id === +this.$route.params.id)
     },
     catigory(){
       return catigories.find(catigory => catigory.id === this.product.categoryId)
@@ -278,8 +277,8 @@ export default {
   filters: {
     numberFormat
   },
-  methods: {
-    gotoPage
-  }
+  // methods: {
+  //   gotoPage
+  // }
 }
 </script>
