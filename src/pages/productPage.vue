@@ -189,7 +189,7 @@
                 </button>
               </div>
 
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" @click.prevent="$router.push({name: 'cart'})">
                 В корзину
               </button>
             </div>
