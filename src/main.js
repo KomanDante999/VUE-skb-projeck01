@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 /* eslint-disable */
+/* eslint-disable */
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
