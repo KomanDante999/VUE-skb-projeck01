@@ -77,7 +77,7 @@
         <span class="item__code">Артикул: {{ product.id }}</span>
         <h2 class="item__title"> {{ product.title }} </h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form class="form" action="#" method="POST" @submit.prevent="addToCart">
             <b class="item__price"> {{ product.prise | numberFormat }} ₽ </b>
 
             <fieldset class="form__block">
@@ -174,22 +174,22 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
+                <button type="button" class="button" @click="productAmount - 1" aria-label="Убрать один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
                 </button>
 
-                <input type="text" value="1" name="count" />
+                <input type="text" v-model.number="productAmount" />
 
-                <button type="button" aria-label="Добавить один товар">
+                <button type="button" class="button" @click="productAmount + 1" aria-label="Добавить один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
                 </button>
               </div>
 
-              <button class="button button--primery" type="submit" @click.prevent="$router.push({name: 'cart'})">
+              <button class="button button--primery" type="submit">
                 В корзину
               </button>
             </div>
@@ -262,10 +262,14 @@
 <script>
 import products from "@/data/products";
 import catigories from "@/data/catigories";
-// import gotoPage from '@/helpers/gotoPaje';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
+  data(){
+    return {
+      productAmount: 1,
+    }
+  },
   computed: {
     product(){
       return products.find(product => product.id === +this.$route.params.id)
@@ -277,8 +281,10 @@ export default {
   filters: {
     numberFormat
   },
-  // methods: {
-  //   gotoPage
-  // }
+  methods: {
+    addToCart(){
+      this.$store.commit('addProductToCard', {productId: this.product.id, amount: this.productAmount})
+    }
+  }
 }
 </script>
