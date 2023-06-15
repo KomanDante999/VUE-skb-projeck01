@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import product from '@/data/products';
 import products from '@/data/products';
 
 Vue.use(Vuex);
@@ -22,12 +21,15 @@ export default new Vuex.Store({
         state.cartProducts.push({productId, amount})
       }
     },
-    // addProductToCard(state, payload){
-    //   state.cartProducts.push({
-    //     productId: payload.productId,
-    //     amount: payload.amount
-    //   })
-    // },
+    updateCartProductAmount(state, {productId, amount}){
+      const item = state.cartProducts.find(item => item.productId === productId)
+        if (item) {
+          item.amount = amount;
+        }
+    },
+    deleteCartProduct(state, productId){
+      state.cartProducts = state.cartProducts.filter(item => item.productId !== productId)
+    }
   },
   getters: {
     cartDetaiProducts(state){
@@ -39,7 +41,7 @@ export default new Vuex.Store({
       })
     },
     cartTotalPrise(state, getters){
-      return getters.cartDetaiProducts.reduce((acc, item) => (item.product.prise * item.amount) + acc, 1)
+      return getters.cartDetaiProducts.reduce((acc, item) => (item.product.prise * item.amount) + acc, 0)
     }
   }
 });
