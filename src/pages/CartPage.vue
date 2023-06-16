@@ -16,7 +16,7 @@
         Корзина
       </h1>
       <span class="content__info">
-        {{$store.state.cartProducts.length}} товара
+        {{ getPluralRules(10) }} 
       </span>
     </div>
 
@@ -33,7 +33,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span> {{ totalPrice | numberFormat }} ₽</span>
+            Итого: <span> {{ numberFormat(totalPrice) }} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit">
@@ -47,18 +47,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CartItemVue from '@/components/CartItem.vue'
 import numberFormat from '@/helpers/numberFormat';
-import { mapGetters } from 'vuex';
+// import pluralRules from '@/helpers/pluralRules';
 
 
 export default {
   components: {CartItemVue},
   computed: {
-    ...mapGetters({products: 'cartDetaiProducts', totalPrice: 'cartTotalPrise'})
+    ...mapGetters({products: 'cartDetaiProducts', totalPrice: 'cartTotalPrise', NumberProductItems: 'cartNumberProductItems'}),
+    
   },
-  filters: {
-    numberFormat
+  methods: {
+    numberFormat,
+    getPluralRules(count) {
+    const forms = ['товар', 'товара', 'товаров'];
+    const pr = new Intl.PluralRules('ru', { type: 'cardinal' }); 
+    const formIndex = pr.select(count); 
+    return '{0} {1}'.format(count, forms[formIndex]);}
   }
 }
 </script>

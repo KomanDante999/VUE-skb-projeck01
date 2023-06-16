@@ -52,9 +52,12 @@ export default new Vuex.Store({
         }
       })
     },
+    cartNumberProductItems(state){
+      return state.cartProducts.length
+    },
     cartTotalPrise(state, getters){
       return getters.cartDetaiProducts.reduce((acc, item) => (item.product.prise * item.amount) + acc, 0)
-    }
+    },
   }
 });
 

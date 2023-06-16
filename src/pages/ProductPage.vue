@@ -78,7 +78,7 @@
         <h2 class="item__title"> {{ product.title }} </h2>
         <div class="item__form">
           <form class="form" action="#" method="POST" @submit.prevent="addToCart">
-            <b class="item__price"> {{ product.prise | numberFormat }} ₽ </b>
+            <b class="item__price"> {{ numberFormat(product.prise) }} ₽ </b>
 
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
@@ -278,9 +278,9 @@ export default {
       return catigories.find(catigory => catigory.id === this.product.categoryId)
     }
   },
-  filters: {
-    numberFormat
-  },
+  // filters: {
+  //   numberFormat
+  // },
   methods: {
     addToCart(){
       this.$store.commit('addProductToCard', {productId: this.product.id, amount: this.productAmount})
@@ -293,6 +293,7 @@ export default {
         this.productAmount -= 1
       }
     },
+    numberFormat
   }
 }
 </script>

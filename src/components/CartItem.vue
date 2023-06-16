@@ -30,7 +30,7 @@
     </div>
 
     <b class="product__price">
-      {{ (item.amount * item.product.prise) | numberFormat }} ₽
+      {{ numberFormat(item.amount * item.product.prise) }} ₽
     </b>
 
     <button
@@ -51,7 +51,7 @@ import numberFormat from '@/helpers/numberFormat';
 import { mapMutations } from 'vuex';
 
 export default {
-  filters: {numberFormat},
+  // filters: {numberFormat},
   props: ['item'],
   computed: {
     amount: {
@@ -67,6 +67,7 @@ export default {
     ...mapMutations({deleteProduct: 'deleteCartProduct'}),
     ...mapMutations({removeProductAmount: 'removeCartProductAmount'}),
     ...mapMutations({addProductAmount: 'addCartProductAmount'}),
+    numberFormat
 
     // addProductAmount(productId){
     //   this.$store.commit('addCartProductAmount', productId)
