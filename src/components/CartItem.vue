@@ -14,7 +14,7 @@
     <span class="product__code"> Артикул: {{ item.product.id }} </span>
 
     <div class="product__counter form__counter">
-      <button type="button" aria-label="Убрать один товар">
+      <button type="button" aria-label="Убрать один товар" @click.prevent="removeProductAmount(item.productId)">
         <svg width="10" height="10" fill="currentColor">
           <use xlink:href="#icon-minus"></use>
         </svg>
@@ -22,7 +22,7 @@
 
       <input type="text" v-model.number="amount" name="count" />
 
-      <button type="button" aria-label="Добавить один товар">
+      <button type="button" aria-label="Добавить один товар" @click.prevent="addProductAmount(item.productId)">
         <svg width="10" height="10" fill="currentColor">
           <use xlink:href="#icon-plus"></use>
         </svg>
@@ -65,7 +65,12 @@ export default {
   },
   methods: {
     ...mapMutations({deleteProduct: 'deleteCartProduct'}),
+    ...mapMutations({removeProductAmount: 'removeCartProductAmount'}),
+    ...mapMutations({addProductAmount: 'addCartProductAmount'}),
 
+    // addProductAmount(productId){
+    //   this.$store.commit('addCartProductAmount', productId)
+    // },
     // deleteProduct(productId){
     //   this.$store.commit('deleteCartProduct', productId)
     // }

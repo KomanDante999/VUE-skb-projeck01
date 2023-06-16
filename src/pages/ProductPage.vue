@@ -174,7 +174,7 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" class="button" @click="productAmount - 1" aria-label="Убрать один товар">
+                <button type="button" class="button" @click.prevent="removeProductAmount" aria-label="Убрать один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -182,7 +182,7 @@
 
                 <input type="text" v-model.number="productAmount" />
 
-                <button type="button" class="button" @click="productAmount + 1" aria-label="Добавить один товар">
+                <button type="button" class="button" @click.prevent="addProductAmount" aria-label="Добавить один товар">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -284,7 +284,15 @@ export default {
   methods: {
     addToCart(){
       this.$store.commit('addProductToCard', {productId: this.product.id, amount: this.productAmount})
-    }
+    },
+    addProductAmount(){
+      this.productAmount += 1
+    },
+    removeProductAmount(){
+      if (this.productAmount > 0) {
+        this.productAmount -= 1
+      }
+    },
   }
 }
 </script>
