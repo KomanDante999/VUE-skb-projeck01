@@ -7,9 +7,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     cartProducts: [
-      {productId: 5, amount: 2},
-      {productId: 7, amount: 10},
-      {productId: 3, amount: 1},
+      // {productId: 5, amount: 2},
+      // {productId: 7, amount: 10},
+      // {productId: 3, amount: 1},
     ]
   },
   mutations: {
@@ -52,7 +52,7 @@ export default new Vuex.Store({
         }
       })
     },
-    cartNumberProductItems(state){
+    cartTotalProductItems(state){
       return state.cartProducts.length
     },
     cartTotalPrise(state, getters){

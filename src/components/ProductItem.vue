@@ -1,7 +1,7 @@
 <template>
   <li class="catalog__item">
     <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}">
-      <img :src="product.img" :alt="product.title">
+      <img :src="product.image.file.url" :alt="product.title">
     </router-link>
 
     <h3 class="catalog__title">
@@ -11,7 +11,7 @@
     </h3>
 
     <span class="catalog__price">
-      {{ numberFormat(product.prise) }} ₽
+      {{ numberFormat(product.price) }} ₽
     </span>
 
     <ul class="colors colors--black">

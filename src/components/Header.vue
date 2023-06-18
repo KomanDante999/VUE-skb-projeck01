@@ -23,8 +23,6 @@
 import CartIndicatorVue from '@/components/CartIndicator.vue';
 
 export default {
-    components: {
-    CartIndicatorVue 
-  }
+  components: {CartIndicatorVue},
 }
 </script>

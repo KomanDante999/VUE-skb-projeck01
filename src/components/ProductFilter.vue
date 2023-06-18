@@ -54,7 +54,7 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" v-for="color in colors" :key="color.id" :aria-label="color.name">
+          <li class="colors__item" v-for="color in colors" :key="color.id" :aria-label="color.title">
             <label class="colors__label">
               <input
                 class="colors__radio sr-only"
@@ -63,7 +63,7 @@
                 :value="color.id"
                 v-model.number="currentColorId"
               />
-              <span class="colors__value" :style="{ backgroundColor: color.value }">
+              <span class="colors__value" :style="{ backgroundColor: color.code }">
               </span>
             </label>
           </li>
@@ -176,8 +176,10 @@
 </template>
 
 <script>
-import catigories from "@/data/catigories";
-import colors from "@/data/colors";
+// import catigories from "@/data/catigories";
+// import colors from "@/data/colors";
+import axios from 'axios';
+import {API_BASE_URL} from '@/config';
 
 export default {
   data() {
@@ -186,15 +188,20 @@ export default {
       currentPriseTo: 0,
       currentCategoryId: 0,
       currentColorId: 0,
+
+      catigoriesData: null,
+      colorsData: null,
     };
   },
   props: ["priseFrom", "priseTo", "categoryId", 'colorId'],
   computed: {
     catigories() {
-      return catigories;
+      return this.catigoriesData ? this.catigoriesData.items : []
+      // return catigories;
     },
     colors() {
-      return colors;
+      return this.colorsData ? this.colorsData.items : []
+      // return colors;
     },
   },
   watch: {
@@ -224,6 +231,18 @@ export default {
       this.$emit("update:categoryId", 0);
       this.$emit("update:colorId", 0);
     },
+    loadCatigories(){
+      axios.get(API_BASE_URL + '/api/productCategories')
+        .then(response => this.catigoriesData = response.data)
+    },
+    loadColors(){
+      axios.get(API_BASE_URL + '/api/colors')
+        .then(response => this.colorsData = response.data)
+    },
   },
+  created(){
+    this.loadCatigories();
+    this.loadColors();
+  }
 };
 </script>
