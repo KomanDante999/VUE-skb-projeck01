@@ -193,31 +193,8 @@
               </fieldset>
 
               <div class="item__row">
-                <div class="form__counter">
-                  <button
-                    type="button"
-                    class="button"
-                    @click.prevent="removeProductAmount"
-                    aria-label="Убрать один товар"
-                  >
-                    <svg width="12" height="12" fill="currentColor">
-                      <use xlink:href="#icon-minus"></use>
-                    </svg>
-                  </button>
 
-                  <input type="text" v-model.number="productAmount" />
-
-                  <button
-                    type="button"
-                    class="button"
-                    @click.prevent="addProductAmount"
-                    aria-label="Добавить один товар"
-                  >
-                    <svg width="12" height="12" fill="currentColor">
-                      <use xlink:href="#icon-plus"></use>
-                    </svg>
-                  </button>
-                </div>
+                <BaseCounterVue @update-count="updateProductAmount" :count="productAmount" v-model="productAmount"/>
 
                 <button class="button button--primery" type="submit">
                   В корзину
@@ -296,8 +273,10 @@
 import numberFormat from "@/helpers/numberFormat";
 import axios from "axios";
 import { API_BASE_URL } from "@/config";
+import BaseCounterVue from '@/components/BaseCounter.vue';
 
 export default {
+  components: {BaseCounterVue},
   data() {
     return {
       productAmount: 1,
@@ -307,6 +286,10 @@ export default {
     };
   },
   computed: {
+    // productAmount() {
+
+    // },
+
     product() {
       return this.productData;
 
@@ -329,13 +312,9 @@ export default {
         amount: this.productAmount,
       });
     },
-    addProductAmount() {
-      this.productAmount += 1;
-    },
-    removeProductAmount() {
-      if (this.productAmount > 0) {
-        this.productAmount -= 1;
-      }
+
+    updateProductAmount(count){
+      this.productAmount = count
     },
     loadProduct() {
       this.productLoading = true;

@@ -3,19 +3,19 @@
     <button
       type="button"
       aria-label="Убрать один товар"
-      @click.prevent="decreaseProduct"
+      @click.prevent="decreaseCount"
     >
       <svg width="10" height="10" fill="currentColor">
         <use xlink:href="#icon-minus"></use>
       </svg>
     </button>
 
-    <input type="text" v-model.number="productAmount" name="count" min="1" />
+    <input type="text" v-model.number="internalValue" name="count" min="1" />
 
     <button
       type="button"
       aria-label="Добавить один товар"
-      @click.prevent="increaseProduct"
+      @click.prevent="increaseCount"
     >
       <svg width="10" height="10" fill="currentColor">
         <use xlink:href="#icon-plus"></use>
@@ -26,15 +26,26 @@
 
 <script>
 export default {
-  props: [productAmount],
+  props: ['count'],
+  computed: {
+    internalValue: {
+      get(){
+        return this.count
+      },
+      set(newValue){
+        this.$emit('input', newValue)
+      }
+    }
+  },
   methods: {
-    decreaseProduct() {
-      if (this.productAmount > 1) {
-        this.$emit("update-product", this.productAmount - 1);
+
+    decreaseCount() {
+      if (this.count > 1) {
+        this.$emit("update-count", this.count - 1);
       }
     },
-    increaseProduct() {
-      this.$emit("update-product", this.productAmount + 1);
+    increaseCount() {
+      this.$emit("update-count", this.count + 1);
     },
   },
 };
