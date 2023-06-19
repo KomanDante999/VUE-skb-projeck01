@@ -17,7 +17,7 @@ export default {
   components: { ProductItem },
   data() {
     return {
-      product,
+      product: {},
     };
   },
   props: ["products"],
