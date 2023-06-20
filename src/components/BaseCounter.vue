@@ -10,7 +10,12 @@
       </svg>
     </button>
 
-    <input type="text" v-model.number="internalValue" name="count" min="1" />
+    <input
+      type="text"
+      v-model.number="internalValue"
+      name="count"
+      :min="minValue"
+    />
 
     <button
       type="button"
@@ -26,26 +31,42 @@
 
 <script>
 export default {
-  props: ['count'],
-  computed: {
-    internalValue: {
-      get(){
-        return this.count
-      },
-      set(newValue){
-        this.$emit('input', newValue)
+  props: {
+    count: {
+      type: Number,
+      required: true,
+      validator: function (value) {
+        return !isNaN(parseFloat(value)) && isFinite(value);
       }
+    },
+    minValue: {
+      type: Number,
+      required: false,
+      default: 1
     }
   },
+  computed: {
+    internalValue: {
+      get() {
+        return this.count;
+      },
+      set(newValue) {
+        if (this.internalValue >= this.minValue) {
+          this.$emit("update-count", newValue);
+        } else {
+          this.$emit("update-count", this.minValue);
+        }
+      },
+    },
+  },
   methods: {
-
     decreaseCount() {
-      if (this.count > 1) {
-        this.$emit("update-count", this.count - 1);
+      if (this.internalValue > this.minValue) {
+        this.internalValue--;
       }
     },
     increaseCount() {
-      this.$emit("update-count", this.count + 1);
+      this.internalValue++;
     },
   },
 };

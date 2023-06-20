@@ -193,8 +193,12 @@
               </fieldset>
 
               <div class="item__row">
-
-                <BaseCounterVue @update-count="updateProductAmount" :count="productAmount" v-model="productAmount"/>
+                <BaseCounterVue
+                  @update-count="updateProductAmount"
+                  :count="productAmount"
+                  :minValue="1"
+                  v-model="productAmount"
+                />
 
                 <button class="button button--primery" type="submit">
                   В корзину
@@ -273,10 +277,10 @@
 import numberFormat from "@/helpers/numberFormat";
 import axios from "axios";
 import { API_BASE_URL } from "@/config";
-import BaseCounterVue from '@/components/BaseCounter.vue';
+import BaseCounterVue from "@/components/BaseCounter.vue";
 
 export default {
-  components: {BaseCounterVue},
+  components: { BaseCounterVue },
   data() {
     return {
       productAmount: 1,
@@ -313,8 +317,8 @@ export default {
       });
     },
 
-    updateProductAmount(count){
-      this.productAmount = count
+    updateProductAmount(count) {
+      this.productAmount = count;
     },
     loadProduct() {
       this.productLoading = true;
@@ -338,12 +342,12 @@ export default {
   //   this.loadProduct();
   // },
   watch: {
-    '$route.params.id': {
-      handler(){
+    "$route.params.id": {
+      handler() {
         this.loadProduct();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 };
 </script>
