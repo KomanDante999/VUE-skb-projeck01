@@ -37,13 +37,13 @@ export default {
       required: true,
       validator: function (value) {
         return !isNaN(parseFloat(value)) && isFinite(value);
-      }
+      },
     },
     minValue: {
       type: Number,
       required: false,
-      default: 1
-    }
+      default: 1,
+    },
   },
   computed: {
     internalValue: {
@@ -51,22 +51,21 @@ export default {
         return this.count;
       },
       set(newValue) {
-        if (this.internalValue >= this.minValue) {
-          this.$emit("update-count", newValue);
-        } else {
-          this.$emit("update-count", this.minValue);
-        }
+        this.updateCount(newValue);
       },
     },
   },
   methods: {
+    increaseCount() {
+      this.internalValue++;
+    },
     decreaseCount() {
       if (this.internalValue > this.minValue) {
         this.internalValue--;
       }
     },
-    increaseCount() {
-      this.internalValue++;
+    updateCount(newValue) {
+      this.$emit("update:count", newValue);
     },
   },
 };

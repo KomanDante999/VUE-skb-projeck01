@@ -193,12 +193,7 @@
               </fieldset>
 
               <div class="item__row">
-                <BaseCounterVue
-                  @update-count="updateProductAmount"
-                  :count="productAmount"
-                  :minValue="1"
-                  v-model="productAmount"
-                />
+                <BaseCounterVue :count.sync="productAmount" :minValue="1"/>
 
                 <button class="button button--primery" type="submit">
                   В корзину
@@ -315,10 +310,6 @@ export default {
         productId: this.product.id,
         amount: this.productAmount,
       });
-    },
-
-    updateProductAmount(count) {
-      this.productAmount = count;
     },
     loadProduct() {
       this.productLoading = true;
