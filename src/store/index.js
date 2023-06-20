@@ -1,16 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from "axios";
+import { API_BASE_URL } from "@/config";
 import products from '@/data/products';
+
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    cartProducts: [
-      // {productId: 5, amount: 2},
-      // {productId: 7, amount: 10},
-      // {productId: 3, amount: 1},
-    ]
+    cartProducts: [],
+    
+    userAccessKey: null,
+    cartProductsData: [],
   },
   mutations: {
     addProductToCard(state, {productId, amount}){
@@ -29,6 +31,13 @@ export default new Vuex.Store({
     },
     deleteCartProduct(state, productId){
       state.cartProducts = state.cartProducts.filter(item => item.productId !== productId)
+    },
+
+    updateUserAccessKey(state, accessKey){
+      state.userAccessKey = accessKey
+    },
+    updateCartProductsData(state, items){
+      state.cartProductsData = items
     }
   },
   getters: {
@@ -46,6 +55,17 @@ export default new Vuex.Store({
     cartTotalPrise(state, getters){
       return getters.cartDetaiProducts.reduce((acc, item) => (item.product.prise * item.amount) + acc, 0)
     },
+  },
+  actions: {
+    loadCart(context){
+      axios
+        .get(API_BASE_URL + '/api/baskets')
+        .then(response => {
+          context.commit('updateUserAccessKey', {accessKey: response.data.user.accessKey})
+          context.commit('updateCartProductsData', {items: response.data.items})
+        })
+
+      }
   }
 });
 
