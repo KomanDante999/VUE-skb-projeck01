@@ -2,7 +2,7 @@
   <li class="cart__item product">
     <div class="product__pic">
       <img
-        :src="item.product.img"
+        :src="item.product.image.file.url"
         width="120"
         height="120"
         alt="item.product.title"
@@ -16,7 +16,7 @@
     <BaseCounterVue :count.sync="amount" :minValue="1"/>
 
     <b class="product__price">
-      {{ numberFormat(item.amount * item.product.prise) }} ₽
+      {{ numberFormat(item.amount * item.product.price) }} ₽
     </b>
 
     <button
