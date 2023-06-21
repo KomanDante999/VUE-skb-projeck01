@@ -193,12 +193,18 @@
               </fieldset>
 
               <div class="item__row">
-                <BaseCounterVue :count.sync="productAmount" :minValue="1"/>
-
-                <button class="button button--primery" type="submit">
+                <BaseCounterVue :count.sync="productAmount" :minValue="1" />
+                <button
+                  class="button button--primery"
+                  type="submit"
+                  :disabled="productAddSending"
+                >
                   В корзину
                 </button>
               </div>
+
+              <div v-show="productAddSending">Добавляем товар в корзину...</div>
+              <div v-show="productAdded">Товар добавлен в корзину</div>
             </form>
           </div>
         </div>
@@ -269,10 +275,11 @@
 <script>
 // import products from "@/data/products";
 // import catigories from "@/data/catigories";
-import numberFormat from "@/helpers/numberFormat";
+import { mapActions } from "vuex";
 import axios from "axios";
 import { API_BASE_URL } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
+import numberFormat from "@/helpers/numberFormat";
 
 export default {
   components: { BaseCounterVue },
@@ -282,6 +289,9 @@ export default {
       productData: null,
       productLoading: false,
       productLoadingFailed: false,
+
+      productAdded: false,
+      productAddSending: false,
     };
   },
   computed: {
@@ -305,12 +315,19 @@ export default {
   //   numberFormat
   // },
   methods: {
+    ...mapActions(["addProductToCard"]),
+
     addToCart() {
-      this.$store.commit("addProductToCard", {
-        productId: this.product.id,
-        amount: this.productAmount,
-      });
+      this.productAdded = false;
+      this.productAddSending = true;
+
+      this.addProductToCard({productId: this.product.id, amount: this.productAmount})
+        .then(() => {
+          this.productAdded = true;
+          this.productAddSending = false;
+        })
     },
+
     loadProduct() {
       this.productLoading = true;
       this.productLoadingFailed = false;
