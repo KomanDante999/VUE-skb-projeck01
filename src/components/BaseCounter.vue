@@ -10,12 +10,14 @@
       </svg>
     </button>
 
-    <input
-      type="text"
-      v-model.number="internalValue"
-      name="count"
-      :min="minValue"
-    />
+    <form @submit.prevent="">
+      <input
+        type="text"
+        v-model.number="internalValue"
+        name="count"
+        :min="minValue"
+      />
+    </form>
 
     <button
       type="button"

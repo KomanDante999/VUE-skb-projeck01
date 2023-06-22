@@ -40,7 +40,7 @@ import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
 import axios from "axios";
-import { API_BASE_URL } from "@/config";
+import { API_BASE_URL, TIMEOUT } from "@/config";
 
 export default {
   components: { ProductList, BasePagination, ProductFilter },
@@ -117,7 +117,7 @@ export default {
           .then((response) => (this.productsData = response.data))
           .catch(() => (this.productsLoadingFailed = true))
           .then(() => (this.productsLoading = false));
-      }, 1000);
+      }, TIMEOUT);
     },
   },
   created() {

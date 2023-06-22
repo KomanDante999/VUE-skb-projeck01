@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 import numberFormat from '@/helpers/numberFormat';
 import BaseCounterVue from "@/components/BaseCounter.vue";
 
@@ -48,12 +48,13 @@ export default {
         return this.item.amount;
       },
       set(value){
-        this.$store.commit('updateCartProductAmount', {productId: this.item.productId, amount: value})
+        this.updateCartProductAmount({productId: this.item.productId, amount: value}) 
       }
     }
   },
   methods: {
     ...mapMutations({deleteProduct: 'deleteCartProduct'}),
+    ...mapActions(['updateCartProductAmount']),
     numberFormat
 
     // addProductAmount(productId){

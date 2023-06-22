@@ -277,7 +277,7 @@
 // import catigories from "@/data/catigories";
 import { mapActions } from "vuex";
 import axios from "axios";
-import { API_BASE_URL } from "@/config";
+import { API_BASE_URL, TIMEOUT } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
 import numberFormat from "@/helpers/numberFormat";
 
@@ -325,7 +325,7 @@ export default {
         .then(() => {
           this.productAdded = true;
           this.productAddSending = false;
-        })
+        });
     },
 
     loadProduct() {
@@ -342,7 +342,7 @@ export default {
           .then((response) => (this.productData = response.data))
           .catch(() => (this.productLoadingFailed = true))
           .then(() => (this.productLoading = false));
-      }, 1000);
+      }, TIMEOUT);
     },
     numberFormat,
   },
