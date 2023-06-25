@@ -102,53 +102,11 @@
 
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет:</legend>
-                <ul class="colors">
-                  <li class="colors__item">
-                    <label class="colors__label">
-                      <input
-                        class="colors__radio sr-only"
-                        type="radio"
-                        name="color-item"
-                        value="blue"
-                        checked=""
-                      />
-                      <span
-                        class="colors__value"
-                        style="background-color: #73b6ea"
-                      >
-                      </span>
-                    </label>
-                  </li>
-                  <li class="colors__item">
-                    <label class="colors__label">
-                      <input
-                        class="colors__radio sr-only"
-                        type="radio"
-                        name="color-item"
-                        value="yellow"
-                      />
-                      <span
-                        class="colors__value"
-                        style="background-color: #ffbe15"
-                      >
-                      </span>
-                    </label>
-                  </li>
-                  <li class="colors__item">
-                    <label class="colors__label">
-                      <input
-                        class="colors__radio sr-only"
-                        type="radio"
-                        name="color-item"
-                        value="gray" />
-                      <span
-                        class="colors__value"
-                        style="background-color: #939393"
-                      >
-                      </span
-                    ></label>
-                  </li>
-                </ul>
+
+                <BaseColorSelectorVue
+                  :colors="product.colors"
+                  :selectedColorId.sync="selectedColorId"
+                />
               </fieldset>
 
               <fieldset class="form__block">
@@ -280,9 +238,10 @@ import axios from "axios";
 import { API_BASE_URL, TIMEOUT } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
 import numberFormat from "@/helpers/numberFormat";
+import BaseColorSelectorVue from "@/components/BaseColorSelector.vue";
 
 export default {
-  components: { BaseCounterVue },
+  components: { BaseCounterVue, BaseColorSelectorVue },
   data() {
     return {
       productAmount: 1,
@@ -292,28 +251,20 @@ export default {
 
       productAdded: false,
       productAddSending: false,
+      selectedColorId: null,
     };
   },
   computed: {
-    // productAmount() {
-
-    // },
-
     product() {
       return this.productData;
-
-      // return products.find((product) => product.id === +this.$route.params.id);
     },
     catigory() {
       return this.productData.category;
-      // return catigories.find(
-      //   (catigory) => catigory.id === this.product.categoryId
-      // );
     },
+    // selectedColorId() {
+    //   return this.productData.colors[0].id;
+    // },
   },
-  // filters: {
-  //   numberFormat
-  // },
   methods: {
     ...mapActions(["addProductToCard"]),
 
@@ -321,11 +272,13 @@ export default {
       this.productAdded = false;
       this.productAddSending = true;
 
-      this.addProductToCard({productId: this.product.id, amount: this.productAmount})
-        .then(() => {
-          this.productAdded = true;
-          this.productAddSending = false;
-        });
+      this.addProductToCard({
+        productId: this.product.id,
+        amount: this.productAmount,
+      }).then(() => {
+        this.productAdded = true;
+        this.productAddSending = false;
+      });
     },
 
     loadProduct() {
@@ -340,15 +293,13 @@ export default {
             // },
           })
           .then((response) => (this.productData = response.data))
+          .then(() => (this.selectedColorId = this.product.colors[0].id))
           .catch(() => (this.productLoadingFailed = true))
           .then(() => (this.productLoading = false));
       }, TIMEOUT);
     },
     numberFormat,
   },
-  // created() {
-  //   this.loadProduct();
-  // },
   watch: {
     "$route.params.id": {
       handler() {
