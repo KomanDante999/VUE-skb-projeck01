@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div v-if="productLoading">Загрузка товаров.....</div>
-    <div v-else-if="!productData">
+    <BaseSnipperVue :trigger="productLoading" />
+
+    <div v-if="!productData">
       <h3>Ошибка загрузки данных!</h3>
       <button type="button" @click.prevent="loadProduct">
         Попробуйте еще раз!
@@ -239,9 +240,11 @@ import { API_BASE_URL, TIMEOUT } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
 import numberFormat from "@/helpers/numberFormat";
 import BaseColorSelectorVue from "@/components/BaseColorSelector.vue";
+import BaseSnipperVue from '@/components/BaseSnipper.vue';
+
 
 export default {
-  components: { BaseCounterVue, BaseColorSelectorVue },
+  components: { BaseCounterVue, BaseColorSelectorVue, BaseSnipperVue },
   data() {
     return {
       productAmount: 1,

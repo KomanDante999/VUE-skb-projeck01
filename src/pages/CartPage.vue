@@ -1,30 +1,40 @@
 <template>
-    <main class="content container">
+  <main class="content container">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <router-link class="breadcrumbs__link" :to="{name: 'main'}" > Каталог </router-link>
+          <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
+            Каталог
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link">
-            Корзина
-          </a>
+          <a class="breadcrumbs__link"> Корзина </a>
         </li>
       </ul>
 
-      <h1 class="content__title">
-        Корзина
-      </h1>
+      <h1 class="content__title">Корзина</h1>
       <span class="content__info">
-        {{totalProductItems + ' ' + pluralRules(totalProductItems, ['товар', 'товара', 'товаров']) }} 
+        {{
+          totalProductItems +
+          " " +
+          pluralRules(totalProductItems, ["товар", "товара", "товаров"])
+        }}
       </span>
     </div>
 
     <section class="cart">
       <form class="cart__form form" action="#" method="POST">
-        <div class="cart__field">
+        <div class="cart__field" style="position: relative;">
+
+        <BaseSnipperVue :trigger="cartLoading" />
+
+
           <ul class="cart__list">
-            <CartItemVue v-for="item in products" :item="item" :key="item.productId"/>
+            <CartItemVue
+              v-for="item in products"
+              :item="item"
+              :key="item.productId"
+            />
           </ul>
         </div>
 
@@ -43,25 +53,51 @@
       </form>
     </section>
   </main>
-
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import { TIMEOUT } from "@/config";
 import CartItemVue from '@/components/CartItem.vue'
 import numberFormat from '@/helpers/numberFormat';
 import pluralRules from '@/helpers/pluralRules';
+import BaseSnipperVue from '@/components/BaseSnipper.vue';
+
 
 
 export default {
-  components: {CartItemVue},
+  components: {CartItemVue, BaseSnipperVue},
+  data(){
+    return {
+      cartLoading: false,
+      cartLoadingFailed: false,
+    }
+  },
   computed: {
     ...mapGetters({products: 'cartDetaiProducts', totalPrice: 'cartTotalPrise', totalProductItems: 'cartTotalProductItems'}),
-    
   },
   methods: {
+    ...mapActions(['loadCart']),
+    loadingCart(){
+      this.cartLoading = true;
+      this.cartLoadingFailed = false;
+      clearTimeout(this.loadCartTimer);
+      this.loadCartTimer = setTimeout(() => {
+        return this.loadCart()
+      }, TIMEOUT)
+      .then(() => {
+        this.cartLoading = false;
+        
+      })
+    },
     numberFormat,
-    pluralRules
-  }
+    pluralRules,
+  },
+
+  created(){
+    this.loadingCart()
+  },
+
+
 }
 </script>

@@ -13,7 +13,9 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
-        <div v-if="productsLoading">Загрузка товаров.....</div>
+
+        <BaseSnipperVue :trigger="productsLoading" />
+
         <div v-if="productsLoadingFailed">
           <h3>Ошибка загрузки данных!</h3>
           <button
@@ -36,14 +38,15 @@
 
 <script>
 // import products from "@/data/products";
+import axios from "axios";
+import { API_BASE_URL, TIMEOUT } from "@/config";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
-import axios from "axios";
-import { API_BASE_URL, TIMEOUT } from "@/config";
+import BaseSnipperVue from '@/components/BaseSnipper.vue';
 
 export default {
-  components: { ProductList, BasePagination, ProductFilter },
+  components: { ProductList, BasePagination, ProductFilter, BaseSnipperVue },
   data() {
     return {
       page: 1,
@@ -59,42 +62,11 @@ export default {
     };
   },
   computed: {
-    // filteredProducts() {
-    //   let filteredProducts = products;
-    //   if (this.filterPriseFrom > 0) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.prise > this.filterPriseFrom
-    //     );
-    //   }
-    //   if (this.filterPriseTo > 0) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.prise < this.filterPriseTo
-    //     );
-    //   }
-    //   if (this.filterCategoryId) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.categoryId === this.filterCategoryId
-    //     );
-    //   }
-    //   if (this.filterColorId) {
-    //     filteredProducts = filteredProducts.filter((product) =>
-    //       product.params.colorId.includes(this.filterColorId)
-    //     );
-    //   }
-    //   return filteredProducts;
-    // },
     products() {
       return this.productsData ? this.productsData.items : []
-        // ? this.productsData.items.map((product) => {
-        //     return { ...product, image: product.image.file.url };
-        //   })
-        // : [];
-      // const offset = (this.page - 1) * this.productsPerPage;
-      // return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
     productsCountTotal() {
       return this.productsData ? this.productsData.pagination.total : 0;
-      // return this.filteredProducts.length;
     },
   },
   methods: {
@@ -122,7 +94,7 @@ export default {
   },
   created() {
     this.loadProducts();
-    this.loadProducts();
+    // this.loadProducts();
   },
   watch: {
     page() {
