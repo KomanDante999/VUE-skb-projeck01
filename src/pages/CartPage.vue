@@ -24,12 +24,15 @@
 
     <section class="cart">
       <form class="cart__form form" action="#" method="POST">
-        <div class="cart__field" style="position: relative;">
+        <div class="cart__field" style="position: relative">
+          <BaseSnipperVue :trigger="cartLoading" />
+          <BaseErrorMesageVue :trigger="cartLoadingFailed" />
+          <BaseResetButtonVue
+            :trigger="cartLoadingFailed"
+            @callback="loadingCart"
+          />
 
-        <BaseSnipperVue :trigger="cartLoading" />
-
-
-          <ul class="cart__list">
+          <ul v-if="products" class="cart__list">
             <CartItemVue
               v-for="item in products"
               :item="item"
@@ -56,44 +59,50 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import CartItemVue from '@/components/CartItem.vue'
-import numberFormat from '@/helpers/numberFormat';
-import pluralRules from '@/helpers/pluralRules';
-import BaseSnipperVue from '@/components/BaseSnipper.vue';
-
-
+import { mapGetters, mapActions } from "vuex";
+import CartItemVue from "@/components/CartItem.vue";
+import numberFormat from "@/helpers/numberFormat";
+import pluralRules from "@/helpers/pluralRules";
+import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
+import BaseResetButtonVue from "@/components/BaseResetButton.vue";
 
 export default {
-  components: {CartItemVue, BaseSnipperVue},
-  data(){
+  components: {
+    CartItemVue,
+    BaseSnipperVue,
+    BaseErrorMesageVue,
+    BaseResetButtonVue,
+  },
+  data() {
     return {
       cartLoading: false,
       cartLoadingFailed: false,
-    }
+    };
   },
   computed: {
-    ...mapGetters({products: 'cartDetaiProducts', totalPrice: 'cartTotalPrise', totalProductItems: 'cartTotalProductItems'}),
+    ...mapGetters({
+      products: "cartDetaiProducts",
+      totalPrice: "cartTotalPrise",
+      totalProductItems: "cartTotalProductItems",
+    }),
   },
   methods: {
-    ...mapActions(['loadCart']),
-    loadingCart(){
+    ...mapActions(["loadCart"]),
+    loadingCart() {
       this.cartLoading = true;
       this.cartLoadingFailed = false;
       this.loadCart()
-      .then(() => {
-        this.cartLoading = false;
-        
-      })
+      .then(() => this.cartLoading = false)
+      .catch(() => this.cartLoadingFailed = true)
+      .then(() => this.cartLoading = false)
     },
     numberFormat,
     pluralRules,
   },
 
-  created(){
-    this.loadingCart()
+  created() {
+    this.loadingCart();
   },
-
-
-}
+};
 </script>

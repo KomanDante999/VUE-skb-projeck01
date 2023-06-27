@@ -1,7 +1,7 @@
 <template>
-  <div v-if="trigger" class="snipper">
+  <div v-if="trigger">
     <img
-      class="snipper__image"
+      class="snipper-image"
       src="img/gif/snipper-5.gif"
       alt="сниппер загрузки"
     />
@@ -9,14 +9,10 @@
 </template>
 
 <style>
-.snipper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-.snipper__image {
+.snipper-image {
   width: 250px;
   height: 250px;
+  padding: 30px;
 }
 </style>
 

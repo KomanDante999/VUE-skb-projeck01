@@ -1,26 +1,30 @@
 <template>
-  <div v-if="trigger">
-    <h3>Ошибка загрузки данных!</h3>
-    <button type="button" @click.prevent="loadProducts">
-      Попробуйте еще раз!
-    </button>
+  <div v-if="trigger" class="message">
+    <h3 class="message__title"> {{ message }} </h3>
   </div>
 </template>
 
 <style>
-.snipper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+.message {
+  padding: 20px;
 }
-.snipper__image {
-  width: 250px;
-  height: 250px;
+.message__title {
+  color: red;
 }
 </style>
 
 <script>
 export default {
-  props: ['trigger']
+  props: {
+    trigger: {
+      type: Boolean,
+      required: true
+    },
+    message: {
+      type: String,
+      required: false,
+      default: 'Ошибка загрузки данных!'
+    }
+  }
 }
 </script>

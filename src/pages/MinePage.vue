@@ -13,19 +13,14 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
-
         <BaseSnipperVue :trigger="productsLoading" />
+        <BaseErrorMesageVue :trigger="productsLoadingFailed" />
+        <BaseResetButtonVue
+          :trigger="productsLoadingFailed"
+          @callback="loadProducts"
+        />
 
-        <div v-if="productsLoadingFailed">
-          <h3>Ошибка загрузки данных!</h3>
-          <button
-            type="button"
-            @click.prevent="loadProducts"
-          >
-            Попробуйте еще раз!
-          </button>
-        </div>
-        <ProductList :products="products" />
+        <ProductList v-if="productsData" :products="products" />
         <BasePagination
           v-model="page"
           :count="productsCountTotal"
@@ -43,10 +38,19 @@ import { API_BASE_URL, TIMEOUT } from "@/config";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
-import BaseSnipperVue from '@/components/BaseSnipper.vue';
+import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
+import BaseResetButtonVue from "@/components/BaseResetButton.vue";
 
 export default {
-  components: { ProductList, BasePagination, ProductFilter, BaseSnipperVue },
+  components: {
+    ProductList,
+    BasePagination,
+    ProductFilter,
+    BaseSnipperVue,
+    BaseErrorMesageVue,
+    BaseResetButtonVue,
+  },
   data() {
     return {
       page: 1,
@@ -63,7 +67,7 @@ export default {
   },
   computed: {
     products() {
-      return this.productsData ? this.productsData.items : []
+      return this.productsData ? this.productsData.items : [];
     },
     productsCountTotal() {
       return this.productsData ? this.productsData.pagination.total : 0;

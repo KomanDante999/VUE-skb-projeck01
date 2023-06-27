@@ -1,14 +1,10 @@
 <template>
   <div>
-    <BaseSnipperVue :trigger="productLoading" />
+    <BaseSnipperVue :trigger="productLoading" class=""/>
+    <BaseErrorMesageVue :trigger="productLoadingFailed" />
+    <BaseResetButtonVue :trigger="productLoadingFailed" @callback="loadProduct"/>
 
-    <div v-if="!productData">
-      <h3>Ошибка загрузки данных!</h3>
-      <button type="button" @click.prevent="loadProduct">
-        Попробуйте еще раз!
-      </button>
-    </div>
-    <main class="content container" v-else>
+    <main class="content container" v-if="productData">
       <div class="content__top">
         <ul class="breadcrumbs">
           <li class="breadcrumbs__item">
@@ -240,11 +236,18 @@ import { API_BASE_URL, TIMEOUT } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
 import numberFormat from "@/helpers/numberFormat";
 import BaseColorSelectorVue from "@/components/BaseColorSelector.vue";
-import BaseSnipperVue from '@/components/BaseSnipper.vue';
-
+import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
+import BaseResetButtonVue from '@/components/BaseResetButton.vue';
 
 export default {
-  components: { BaseCounterVue, BaseColorSelectorVue, BaseSnipperVue },
+  components: {
+    BaseCounterVue,
+    BaseColorSelectorVue,
+    BaseSnipperVue,
+    BaseErrorMesageVue,
+    BaseResetButtonVue,
+  },
   data() {
     return {
       productAmount: 1,
