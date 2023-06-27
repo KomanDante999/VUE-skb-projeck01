@@ -57,7 +57,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { TIMEOUT } from "@/config";
 import CartItemVue from '@/components/CartItem.vue'
 import numberFormat from '@/helpers/numberFormat';
 import pluralRules from '@/helpers/pluralRules';
@@ -81,10 +80,7 @@ export default {
     loadingCart(){
       this.cartLoading = true;
       this.cartLoadingFailed = false;
-      clearTimeout(this.loadCartTimer);
-      this.loadCartTimer = setTimeout(() => {
-        return this.loadCart()
-      }, TIMEOUT)
+      this.loadCart()
       .then(() => {
         this.cartLoading = false;
         
