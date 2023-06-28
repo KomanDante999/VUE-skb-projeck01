@@ -10,14 +10,18 @@
 
 <style>
 .snipper-image {
-  width: 250px;
-  height: 250px;
-  padding: 30px;
+  width: 100%;
+  height: 100%;
 }
 </style>
 
 <script>
 export default {
-  props: ['trigger']
-}
+  props: {
+    trigger: {
+      type: Boolean,
+      required: true,
+    },
+  },
+};
 </script>

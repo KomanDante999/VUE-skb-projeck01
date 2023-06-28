@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="catalog__error-block">
-      <BaseSnipperVue :trigger="productLoading" class="" />
+      <BaseSnipperVue :trigger="productLoading" />
       <BaseErrorMesageVue :trigger="productLoadingFailed" />
       <BaseResetButtonVue
         :trigger="productLoadingFailed"
