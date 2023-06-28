@@ -1,8 +1,13 @@
 <template>
   <div>
-    <BaseSnipperVue :trigger="productLoading" class=""/>
-    <BaseErrorMesageVue :trigger="productLoadingFailed" />
-    <BaseResetButtonVue :trigger="productLoadingFailed" @callback="loadProduct"/>
+    <div class="catalog__error-block">
+      <BaseSnipperVue :trigger="productLoading" class="" />
+      <BaseErrorMesageVue :trigger="productLoadingFailed" />
+      <BaseResetButtonVue
+        :trigger="productLoadingFailed"
+        @callback="loadProduct"
+      />
+    </div>
 
     <main class="content container" v-if="productData">
       <div class="content__top">
@@ -227,6 +232,17 @@
   </div>
 </template>
 
+<style>
+.catalog__error-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+}
+</style>
+
+
 <script>
 // import products from "@/data/products";
 // import catigories from "@/data/catigories";
@@ -238,7 +254,7 @@ import numberFormat from "@/helpers/numberFormat";
 import BaseColorSelectorVue from "@/components/BaseColorSelector.vue";
 import BaseSnipperVue from "@/components/BaseSnipper.vue";
 import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
-import BaseResetButtonVue from '@/components/BaseResetButton.vue';
+import BaseResetButtonVue from "@/components/BaseResetButton.vue";
 
 export default {
   components: {

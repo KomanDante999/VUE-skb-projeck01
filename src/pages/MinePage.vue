@@ -13,12 +13,14 @@
         :color-id.sync="filterColorId"
       />
       <section class="catalog">
-        <BaseSnipperVue :trigger="productsLoading" />
-        <BaseErrorMesageVue :trigger="productsLoadingFailed" />
-        <BaseResetButtonVue
-          :trigger="productsLoadingFailed"
-          @callback="loadProducts"
-        />
+        <div class="catalog__error-block">
+          <BaseSnipperVue :trigger="productsLoading" />
+          <BaseErrorMesageVue :trigger="productsLoadingFailed" />
+          <BaseResetButtonVue
+            :trigger="productsLoadingFailed"
+            @callback="loadProducts"
+          />
+        </div>
 
         <ProductList v-if="productsData" :products="products" />
         <BasePagination
@@ -30,6 +32,15 @@
     </div>
   </main>
 </template>
+
+<style>
+.catalog__error-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+</style>
 
 <script>
 // import products from "@/data/products";
