@@ -93,7 +93,7 @@
         <div class="item__info">
           <span class="item__code">Артикул: {{ product.id }}</span>
           <h2 class="item__title">{{ product.title }}</h2>
-          <div class="item__form">
+          <div class="item__form pos-rel">
             <form
               class="form"
               action="#"
@@ -162,9 +162,14 @@
                   В корзину
                 </button>
               </div>
+              <BaseSnipperVue
+                class="form__add-snipper"
+                :trigger="productAddSending"
+              />
 
-              <div v-show="productAddSending">Добавляем товар в корзину...</div>
-              <div v-show="productAdded">Товар добавлен в корзину</div>
+              <div class="form__add-message" v-show="productAdded">
+                <h4>Товар добавлен в корзину</h4>
+              </div>
             </form>
           </div>
         </div>
@@ -240,9 +245,25 @@
   flex-direction: column;
   padding: 40px;
 }
+.pos-rel {
+  position: relative;
+}
+.form__add-snipper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+}
+.form__add-message {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+}
 </style>
 
-
+  
 <script>
 // import products from "@/data/products";
 // import catigories from "@/data/catigories";
