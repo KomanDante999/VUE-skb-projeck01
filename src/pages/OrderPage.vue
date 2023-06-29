@@ -22,7 +22,12 @@
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form
+        class="cart__form form"
+        action="#"
+        method="POST"
+        @submit.prevent="order"
+      >
         <div class="cart__field">
           <div class="cart__data">
             <BaseInputTextVue
@@ -55,8 +60,8 @@
             <BaseInputTextaryaVue
               title="Комментарий к заказу"
               placeholder="Ваши пожелания"
-              :error="formError.comments"
-              v-model="formData.comments"
+              :error="formError.comment"
+              v-model="formData.comment"
             />
           </div>
 
@@ -159,6 +164,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { API_BASE_URL } from "@/config";
+
 import BaseInputTextVue from "@/components/BaseInputText.vue";
 import BaseInputTextaryaVue from "@/components/BaseInputTextarya.vue";
 
@@ -172,6 +180,26 @@ export default {
       formData: {},
       formError: {},
     };
+  },
+  methods: {
+    order() {
+      this.formError = {}
+
+      axios.post(
+        API_BASE_URL + "/api/orders",
+        {
+          ...this.formData,
+        },
+        {
+          params: {
+            userAccessKey: this.$store.state.userAccessKey,
+          },
+        }
+      )
+      .catch(error => {
+        this.formError = error.response.data.error.request || {}
+      })
+    },
   },
 };
 </script>
