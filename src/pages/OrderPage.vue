@@ -151,8 +151,8 @@
             Оформить заказ
           </button>
         </div>
-        <div class="cart__error form__error-block">
-          <h4>Заявка не отправлена!</h4>
+        <div v-show="formErrorMessage" class="cart__error form__error-block">
+          <h4> {{ formErrorMessage }} </h4>
           <p>
             Похоже произошла ошибка. Попробуйте отправить снова или
             перезагрузите страницу.
@@ -166,7 +166,7 @@
 <script>
 import axios from "axios";
 import { API_BASE_URL } from "@/config";
-
+import 'core-js/stable/promise';
 import BaseInputTextVue from "@/components/BaseInputText.vue";
 import BaseInputTextaryaVue from "@/components/BaseInputTextarya.vue";
 
@@ -179,11 +179,13 @@ export default {
     return {
       formData: {},
       formError: {},
+      formErrorMessage: '',
     };
   },
   methods: {
     order() {
       this.formError = {}
+      this.formErrorMessage= ''
 
       axios.post(
         API_BASE_URL + "/api/orders",
@@ -196,8 +198,15 @@ export default {
           },
         }
       )
+      .then(response => {
+        this.$store.commit('resetCart');
+        this.$store.commit('updateOrderInfo', response.data);
+        this.$router.push({name: 'orderInfo', params: {id: response.data.id}})
+      })
       .catch(error => {
         this.formError = error.response.data.error.request || {}
+        this.formErrorMessage = error.response.data.error.message
+
       })
     },
   },
