@@ -1,27 +1,16 @@
 <template>
   <main class="content container">
     <div class="content__top">
-      <ul class="breadcrumbs">
-        <li class="breadcrumbs__item">
-          <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
-            Каталог
-          </router-link>
-        </li>
-        <li class="breadcrumbs__item">
-          <router-link class="breadcrumbs__link" :to="{ name: 'cart' }">
-            Корзина
-          </router-link>
-        </li>
-        <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link"> Оформление заказа </a>
-        </li>
-      </ul>
-
+      <BaseBreadcrumbsVue :breadcrumbs="breadcrumbs" />
       <h1 class="content__title">Корзина</h1>
-      <span class="content__info"> 3 товара </span>
+      <ProductTotalVue :totalProduct="totalProductItems" />
     </div>
 
     <section class="cart">
+      <div class="cart-preloader">
+        <BasePrelosderVue class="cart-preloader__img" :trigger="orderSending" />
+      </div>
+
       <form
         class="cart__form form"
         action="#"
@@ -123,36 +112,14 @@
           </div>
         </div>
 
-        <div class="cart__block">
-          <ul class="cart__orders">
-            <li class="cart__order">
-              <h3>Смартфон Xiaomi Redmi Note 7 Pro 6/128GB</h3>
-              <b>18 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-              <b>4 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-              <b>8 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-          </ul>
+        <OrderProductsInfoVue
+          :products="products"
+          :totalPrice="totalPrice"
+          :totalProductItems="totalProductItems"
+        />
 
-          <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
-          </div>
-
-          <button class="cart__button button button--primery" type="submit">
-            Оформить заказ
-          </button>
-        </div>
         <div v-show="formErrorMessage" class="cart__error form__error-block">
-          <h4> {{ formErrorMessage }} </h4>
+          <h4>{{ formErrorMessage }}</h4>
           <p>
             Похоже произошла ошибка. Попробуйте отправить снова или
             перезагрузите страницу.
@@ -163,52 +130,105 @@
   </main>
 </template>
 
+<style>
+.cart-preloader {
+  display: flex;
+  justify-content: center;
+}
+.cart-preloader__img {
+  width: 250px;
+}
+</style>
+
 <script>
 import axios from "axios";
-import { API_BASE_URL } from "@/config";
-import 'core-js/stable/promise';
+import { API_BASE_URL, TIMEOUT } from "@/config";
+import "core-js/stable/promise";
 import BaseInputTextVue from "@/components/BaseInputText.vue";
 import BaseInputTextaryaVue from "@/components/BaseInputTextarya.vue";
+import productsInfoMixin from "@/mixins/productsInfoMixin";
+import OrderProductsInfoVue from "../components/OrderProductsInfo.vue";
+import BaseBreadcrumbsVue from "@/components/BaseBreadcrumbs.vue";
+import BasePrelosderVue from "@/components/BasePrelosder.vue";
+import ProductTotalVue from '@/components/ProductTotal.vue';
+
 
 export default {
   components: {
     BaseInputTextVue,
     BaseInputTextaryaVue,
+    OrderProductsInfoVue,
+    BaseBreadcrumbsVue,
+    BasePrelosderVue,
+    ProductTotalVue,
   },
   data() {
     return {
-      formData: {},
+      formData: {
+        name: 'Крайтон Майк Фриман',
+        address: 'пятый рукав галлактики',
+        phone: '+79131999999',
+        email: 'friman@yandex.ru'
+      },
       formError: {},
-      formErrorMessage: '',
+      formErrorMessage: "",
+      orderSending: false,
     };
+  },
+  computed: {
+    breadcrumbs() {
+      return [
+        {
+          titlePage: "Каталог",
+          routerName: "main",
+        },
+        {
+          titlePage: "Корзина",
+          routerName: "cart",
+        },
+        {
+          titlePage: "Оформление заказа",
+          routerName: "",
+          cursorNone: true,
+        },
+      ];
+    },
   },
   methods: {
     order() {
-      this.formError = {}
-      this.formErrorMessage= ''
-
-      axios.post(
-        API_BASE_URL + "/api/orders",
-        {
-          ...this.formData,
-        },
-        {
-          params: {
-            userAccessKey: this.$store.state.userAccessKey,
-          },
-        }
-      )
-      .then(response => {
-        this.$store.commit('resetCart');
-        this.$store.commit('updateOrderInfo', response.data);
-        this.$router.push({name: 'orderInfo', params: {id: response.data.id}})
-      })
-      .catch(error => {
-        this.formError = error.response.data.error.request || {}
-        this.formErrorMessage = error.response.data.error.message
-
-      })
+      this.formError = {};
+      this.formErrorMessage = "";
+      this.orderSending = true;
+      return new Promise((resolve) => setTimeout(resolve, TIMEOUT)).then(() => {
+        return axios
+          .post(
+            API_BASE_URL + "/api/orders",
+            {
+              ...this.formData,
+            },
+            {
+              params: {
+                userAccessKey: this.$store.state.userAccessKey,
+              },
+            }
+          )
+          .then((response) => {
+            this.orderSending = false;
+            this.$store.commit("resetCart");
+            this.$store.commit("updateOrderInfo", response.data);
+            this.$router.push({
+              name: "orderInfo",
+              params: { id: response.data.id },
+            });
+          })
+          .catch((error) => {
+            this.orderSending = false;
+            this.formError = error.response.data.error.request || {};
+            this.formErrorMessage = error.response.data.error.message;
+          });
+      });
     },
   },
+  mixins: [productsInfoMixin],
 };
 </script>

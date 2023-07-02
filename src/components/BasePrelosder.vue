@@ -2,7 +2,7 @@
   <div v-if="trigger">
     <img
       class="snipper-image"
-      src="img/gif/snipper-5.gif"
+      :src="src"
       alt="сниппер загрузки"
     />
   </div>
@@ -16,12 +16,17 @@
 </style>
 
 <script>
+import { PRELOAD_SNIPPER5 } from '@/config'
+
 export default {
   props: {
     trigger: {
       type: Boolean,
       required: true,
     },
+    src: {
+      default: PRELOAD_SNIPPER5,
+    }
   },
 };
 </script>

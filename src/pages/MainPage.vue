@@ -14,7 +14,7 @@
       />
       <section class="catalog">
         <div class="catalog__error-block">
-          <BaseSnipperVue :trigger="productsLoading" />
+          <BasePrelosderVue :trigger="productsLoading" />
           <BaseErrorMesageVue :trigger="productsLoadingFailed" />
           <BaseResetButtonVue
             :trigger="productsLoadingFailed"
@@ -49,16 +49,16 @@ import { API_BASE_URL, TIMEOUT } from "@/config";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
-import BaseSnipperVue from "@/components/BaseSnipper.vue";
 import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
 import BaseResetButtonVue from "@/components/BaseResetButton.vue";
+import BasePrelosderVue from '@/components/BasePrelosder.vue';
 
 export default {
   components: {
     ProductList,
     BasePagination,
     ProductFilter,
-    BaseSnipperVue,
+    BasePrelosderVue,
     BaseErrorMesageVue,
     BaseResetButtonVue,
   },

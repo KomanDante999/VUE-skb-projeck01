@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="catalog__error-block">
-      <BaseSnipperVue :trigger="cartLoading" />
+      <BasePrelosderVue :trigger="cartLoading" />
       <BaseErrorMesageVue :trigger="cartLoadingFailed" />
       <BaseResetButtonVue
         :trigger="cartLoadingFailed"
@@ -11,25 +11,9 @@
 
     <main v-if="!cartLoadingFailed && !cartLoading" class="content container">
       <div class="content__top">
-        <ul class="breadcrumbs">
-          <li class="breadcrumbs__item">
-            <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
-              Каталог
-            </router-link>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link"> Корзина </a>
-          </li>
-        </ul>
-
+        <BaseBreadcrumbsVue :breadcrumbs="breadcrumbs" />
         <h1 class="content__title">Корзина</h1>
-        <span class="content__info">
-          {{
-            totalProductItems +
-            " " +
-            pluralRules(totalProductItems, ["товар", "товара", "товаров"])
-          }}
-        </span>
+        <ProductTotalVue :totalProduct="totalProductItems"/>
       </div>
 
       <section class="cart">
@@ -54,8 +38,9 @@
             <router-link
               tag="button"
               class="cart__button button button--primery"
-              :to="{name: 'order'}"
+              :to="{ name: 'order' }"
               type="submit"
+              v-show="totalProductItems"
             >
               Оформить заказ
             </router-link>
@@ -77,20 +62,24 @@
 
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import CartItemVue from "@/components/CartItem.vue";
 import numberFormat from "@/helpers/numberFormat";
-import pluralRules from "@/helpers/pluralRules";
-import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import BasePrelosderVue from "@/components/BasePrelosder.vue";
 import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
 import BaseResetButtonVue from "@/components/BaseResetButton.vue";
+import productsInfoMixin from "@/mixins/productsInfoMixin";
+import BaseBreadcrumbsVue from "@/components/BaseBreadcrumbs.vue";
+import ProductTotalVue from '@/components/ProductTotal.vue';
 
 export default {
   components: {
     CartItemVue,
-    BaseSnipperVue,
+    BasePrelosderVue,
     BaseErrorMesageVue,
     BaseResetButtonVue,
+    BaseBreadcrumbsVue,
+    ProductTotalVue,
   },
   data() {
     return {
@@ -99,11 +88,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      products: "cartDetaiProducts",
-      totalPrice: "cartTotalPrise",
-      totalProductItems: "cartTotalProductItems",
-    }),
+    breadcrumbs() {
+      return [
+        {
+          titlePage: "Каталог",
+          routerName: "main",
+        },
+        {
+          titlePage: 'Корзина',
+          routerName: "",
+          cursorNone: true,
+        },
+      ];
+    },
   },
   methods: {
     ...mapActions(["loadCart"]),
@@ -116,8 +113,8 @@ export default {
         .then(() => (this.cartLoading = false));
     },
     numberFormat,
-    pluralRules,
   },
+  mixins: [productsInfoMixin],
 
   created() {
     this.loadingCart();

@@ -1,10 +1,11 @@
 <template>
-  <div>
-    
+  <div class="p-rel">
+    <BasePrelosderVue class="header-preload" :trigger="$store.state.cartLoading" :src="src" />
     <router-link
       class="header__cart"
       :to="{ name: 'cart' }"
       aria-label="Корзина с товарами"
+      v-show="!$store.state.cartLoading"
     >
       <svg width="30" height="21" fill="currentColor">
         <use xlink:href="#icon-cart"></use>
@@ -16,12 +17,29 @@
   </div>
 </template>
 
+<style>
+.p-rel {
+  position: relative;
+}
+.header-preload {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+</style>
+
 <script>
 import { mapGetters } from "vuex";
-import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import { PRELOAD_GEARS } from "@/config";
+import BasePrelosderVue from "@/components/BasePrelosder.vue";
 export default {
   components: {
-    BaseSnipperVue,
+    BasePrelosderVue,
+  },
+  data() {
+    return {
+      src: PRELOAD_GEARS,
+    };
   },
   computed: {
     ...mapGetters({ totalProductItems: "cartTotalProductItems" }),

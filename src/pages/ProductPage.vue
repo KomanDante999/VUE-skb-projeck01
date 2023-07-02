@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="catalog__error-block">
-      <BaseSnipperVue :trigger="productLoading" />
+      <BasePrelosderVue :trigger="productLoading" />
       <BaseErrorMesageVue :trigger="productLoadingFailed" />
       <BaseResetButtonVue
         :trigger="productLoadingFailed"
@@ -11,25 +11,7 @@
 
     <main class="content container" v-if="productData">
       <div class="content__top">
-        <ul class="breadcrumbs">
-          <li class="breadcrumbs__item">
-            <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
-              Каталог
-            </router-link>
-          </li>
-          <li class="breadcrumbs__item">
-            <a
-              class="breadcrumbs__link"
-              href="#"
-              @click.prevent="$router.push({ name: 'main' })"
-            >
-              {{ catigory.title }}
-            </a>
-          </li>
-          <li class="breadcrumbs__item">
-            <a class="breadcrumbs__link"> {{ product.title }} </a>
-          </li>
-        </ul>
+        <BaseBreadcrumbsVue :breadcrumbs="breadcrumbs" />
       </div>
 
       <section class="item">
@@ -162,7 +144,7 @@
                   В корзину
                 </button>
               </div>
-              <BaseSnipperVue
+              <BasePrelosderVue
                 class="form__add-snipper"
                 :trigger="productAddSending"
               />
@@ -259,7 +241,6 @@
   position: absolute;
   top: 20px;
   right: 20px;
-
 }
 </style>
 
@@ -273,17 +254,19 @@ import { API_BASE_URL, TIMEOUT } from "@/config";
 import BaseCounterVue from "@/components/BaseCounter.vue";
 import numberFormat from "@/helpers/numberFormat";
 import BaseColorSelectorVue from "@/components/BaseColorSelector.vue";
-import BaseSnipperVue from "@/components/BaseSnipper.vue";
+import BasePrelosderVue from "@/components/BasePrelosder.vue";
 import BaseErrorMesageVue from "@/components/BaseErrorMesage.vue";
 import BaseResetButtonVue from "@/components/BaseResetButton.vue";
+import BaseBreadcrumbsVue from "@/components/BaseBreadcrumbs.vue";
 
 export default {
   components: {
     BaseCounterVue,
     BaseColorSelectorVue,
-    BaseSnipperVue,
+    BasePrelosderVue,
     BaseErrorMesageVue,
     BaseResetButtonVue,
+    BaseBreadcrumbsVue,
   },
   data() {
     return {
@@ -304,9 +287,23 @@ export default {
     catigory() {
       return this.productData.category;
     },
-    // selectedColorId() {
-    //   return this.productData.colors[0].id;
-    // },
+    breadcrumbs() {
+      return [
+        {
+          titlePage: "Каталог",
+          routerName: "main",
+        },
+        {
+          titlePage: this.catigory.title,
+          routerName: "main",
+        },
+        {
+          titlePage: this.product.title,
+          routerName: "",
+          cursorNone: true,
+        },
+      ];
+    },
   },
   methods: {
     ...mapActions(["addProductToCard"]),

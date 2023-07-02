@@ -2,11 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
 import { API_BASE_URL, TIMEOUT } from "@/config";
-// import { resolve } from 'core-js/es6/promise';
-// import { setTimeout } from 'core-js';
 import 'core-js/stable/promise';
-// import products from '@/data/products';
-
 
 Vue.use(Vuex);
 
@@ -16,7 +12,10 @@ export default new Vuex.Store({
 
     userAccessKey: null,
     cartProductsData: [],
+    cartLoading: false,
+    orderLoading: false,
     orderInfo: null,
+
   },
   mutations: {
     updateCartProductAmount(state, { productId, amount }) {
@@ -73,6 +72,7 @@ export default new Vuex.Store({
   },
   actions: {
     loadCart(context) {
+      context.state.cartLoading = true
       return (new Promise(resolve => setTimeout(resolve, TIMEOUT)))
         .then(() => {
           return axios
@@ -88,10 +88,12 @@ export default new Vuex.Store({
               }
               context.commit('updateCartProductsData', response.data.items)
               context.commit('syncCartProducts')
+              context.state.cartLoading = false
             })
         })
     },
     addProductToCard(context, { productId, amount }) {
+      context.state.cartLoading = true
       return (new Promise(resolve => setTimeout(resolve, TIMEOUT)))
         .then(() => {
           return axios
@@ -100,6 +102,7 @@ export default new Vuex.Store({
             .then(response => {
               context.commit('updateCartProductsData', response.data.items)
               context.commit('syncCartProducts')
+              context.state.cartLoading = false
             })
         })
     },
@@ -140,8 +143,8 @@ export default new Vuex.Store({
           context.commit('syncCartProducts')
         })
     },
-    loadOrderInfo(context, orderId){
-      return axios
+    loadOrderInfo(context, orderId) {
+      axios
         .get(API_BASE_URL + "/api/orders/" + orderId, {
           params: {
             userAccessKey: context.state.userAccessKey
@@ -150,7 +153,23 @@ export default new Vuex.Store({
         .then(response => {
           context.commit('updateOrderInfo', response.data)
         })
-    }
+    },
+    // loadOrderInfo(context, orderId){
+    //   context.state.orderLoading = true
+    //   return (new Promise(resolve => setTimeout(resolve, TIMEOUT)))
+    //   .then(() => {
+    //     return axios
+    //     .get(API_BASE_URL + "/api/orders/" + orderId, {
+    //       params: {
+    //         userAccessKey: context.state.userAccessKey
+    //       }
+    //     })
+    //     .then(response => {
+    //       context.state.orderLoading = false
+    //       context.commit('updateOrderInfo', response.data)
+    //         })
+    //     })
+    // },
   }
 });
 
