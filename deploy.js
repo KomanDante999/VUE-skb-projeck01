@@ -5,8 +5,8 @@ try {
   // Собираем проект
   execSync('npm run build');
 
-  // Получаем абсолютный путь до директории проекта
-  const absolutePath = path.resolve(__dirname);
+  // Получаем абсолютный путь до директории dist
+  const absolutePath = path.resolve(__dirname, 'dist');
 
   // Инициализируем Git репозиторий
   execSync('git init', { cwd: absolutePath });

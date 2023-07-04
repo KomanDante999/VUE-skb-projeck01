@@ -7,7 +7,7 @@
       />
     </div>
 
-    <div v-if="!orderLoading">
+    <div v-if="orderInfo">
       <div class="content__top">
         <BaseBreadcrumbsVue :breadcrumbs="breadcrumbs" />
         <h1 class="content__title">
@@ -120,12 +120,12 @@ export default {
     ) return;
 
     this.orderLoading = true
-    return (new Promise(resolve => setTimeout(resolve, TIMEOUT)))
-      .then(() => {
-        this.$store.dispatch("loadOrderInfo", this.$route.params.id);
-        this.orderLoading = false
-      })
-
+    return (new Promise(resolve => setTimeout(() => {
+      this.$store.dispatch("loadOrderInfo", this.$route.params.id);
+      this.orderLoading = false;
+      resolve()
+    }, TIMEOUT)))
   },
 };
+
 </script>
