@@ -19,7 +19,7 @@ try {
   execSync('git commit -m "deploy"');
 
   // Публикуем проект на gh-pages
-  execSync('git push -f https://github.com/KomanDante999/vue-tehnozavr.git master:gh-pages');
+  execSync('git push -f https://github.com/KomanDante999/vue-tehnozavr.git HEAD:gh-pages');
 
   // Возвращаемся в исходную папку
   execSync('cd -');
