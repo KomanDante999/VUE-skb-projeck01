@@ -1,28 +1,26 @@
-const { execSync } = require('child_process')
-try {
-  // Останавливаем сборку при ошибках
-  // execSync('set -e');
+const { execSync } = require('child_process');
+const path = require('path');
 
+try {
   // Собираем проект
   execSync('npm run build');
 
-  // Переходим в папку dist
-  execSync('cd dist');
+  // Получаем абсолютный путь до директории проекта
+  const absolutePath = path.resolve(__dirname);
 
   // Инициализируем Git репозиторий
-  execSync('git init');
+  execSync('git init', { cwd: absolutePath });
 
   // Добавляем все файлы в коммит
-  execSync('git add -A');
+  execSync('git add -A', { cwd: absolutePath });
 
   // Создаем коммит
-  execSync('git commit -m "deploy"');
+  execSync('git commit -m "deploy"', { cwd: absolutePath });
 
-  // Публикуем проект на gh-pages
-  execSync('git push -f https://github.com/KomanDante999/vue-tehnozavr.git HEAD:gh-pages');
+  // Force push на ветку gh-pages, а не на master
+  execSync('git push -f https://github.com/KomanDante999/vue-tehnozavr.git HEAD:gh-pages', { cwd: absolutePath });
 
-  // Возвращаемся в исходную папку
-  execSync('cd -');
+  console.log("Развертывание завершено успешно.");
 } catch (error) {
   console.error(`Ошибка при выполнении развертывания: ${error}`);
   process.exit(1);
